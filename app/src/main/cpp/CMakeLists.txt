@@ -26,8 +26,13 @@ project("dept_app")
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native-lib.cpp)
+        native-lib
+        native-lib.c)
 
+find_library(
+        log-lib
+        log
+)
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
@@ -35,3 +40,4 @@ target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
         android
         log)
+#target_link_options(dept_app PRIVATE -Wl,--max-page-size=16384)

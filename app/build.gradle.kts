@@ -1,3 +1,5 @@
+//import com.android.build.api.dsl.Packaging
+
 plugins {
     alias(libs.plugins.android.application)
 }
@@ -7,12 +9,13 @@ android {
     compileSdk = 36
 
     defaultConfig {
+        ndkVersion = "29.0.14206865"
         applicationId = "com.example.dept_app"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-
+        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,6 +40,25 @@ android {
     }
     buildFeatures {
         viewBinding = true
+    }
+    packaging {
+        resources.pickFirsts.add("META-INF/*.kotlin_module")
+        jniLibs {
+            useLegacyPackaging = false  // ensures proper alignment for .so files
+        }
+        resources {
+            excludes += listOf(
+                "META-INF/DEPENDENCIES",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE",
+                "META-INF/NOTICE.txt",
+                "META-INF/AL2.0",
+                "META-INF/LGPL2.1",
+                "META-INF/*.kotlin_module",
+                "META-INF/services/javax.annotation.processing.Processor"
+            )
+        }
     }
 }
 

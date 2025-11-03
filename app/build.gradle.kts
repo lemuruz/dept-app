@@ -1,3 +1,7 @@
+//val Any.compiler: kotlin.Any
+//
+//val org.gradle.accessors.dm.LibrariesForLibs.room: kotlin.Any
+
 //import com.android.build.api.dsl.Packaging
 
 plugins {
@@ -70,4 +74,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
+    //room db component
+    implementation (libs.room.runtime)
+    annotationProcessor (libs.room.compiler)
 }

@@ -3,7 +3,14 @@ package com.example.dept_app;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
-import com.example.dept_app.databinding.ActivityMainBinding;
+
+import com.example.dept_app.data.AppDatabase;
+import com.example.dept_app.data.Debts;
+import com.example.dept_app.data.DebtDao;
+import com.example.dept_app.data.Friends;
+import com.example.dept_app.data.friendsDao;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +33,42 @@ public class MainActivity extends AppCompatActivity {
         int netDebt = calculateNetDebt(youOwe, friendOwes);
 
         text.setText("Net debt = " + netDebt);
+
+        AppDatabase db = AppDatabase.getInstance(this);
+        friendsDao friendsDao = db.friendsDao();
+        DebtDao debtDao = db.debtDao();
+
+        // Insert a sample person (if not already in DB)
+        if (friendsDao.getAllFriends().isEmpty()) {
+            Friends john = new Friends();
+            john.setName("John");
+            friendsDao.insert(john);
+        }
+
+        // Get the first person’s ID
+        int johnId = friendsDao.getAllFriends().get(0).getId();
+
+        // Insert a sample debt record for that person
+        Debts debt = new Debts();
+        debt.setFriendsId(johnId);
+        debt.setDate("2025-11-03");
+        debt.setDescription("Lunch");
+        debt.setAmount(120);
+        debt.setType("you_owe");
+        debtDao.insert(debt);
+
+        // Query all debts for John
+        List<Debts> johnDebts = debtDao.getDebtsByPerson(johnId);
+
+        // Print debts to Logcat (for debugging)
+        for (Debts d : johnDebts) {
+            System.out.println("Debt: " + d.getDescription() + " = " + d.getAmount());
+        }
+
+        // Get total "you owe" debts
+        double totalYouOwe = debtDao.getTotalByType("you_owe");
+        System.out.println("Total you owe: " + totalYouOwe);
+
     }
 
     /**

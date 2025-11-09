@@ -4,7 +4,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "friends")
-public class friends {
+public class Friends {
 
     @PrimaryKey(autoGenerate = true)
     private int id;

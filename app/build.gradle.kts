@@ -1,11 +1,8 @@
-//val Any.compiler: kotlin.Any
-//
-//val org.gradle.accessors.dm.LibrariesForLibs.room: kotlin.Any
-
-//import com.android.build.api.dsl.Packaging
-
 plugins {
     alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+//    id("androidx.room") version "2.8.3"
+//    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -19,10 +16,25 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        multiDexEnabled = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf(
+                    "room.schemaLocation" to "$projectDir/schemas",
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
+                )
+            }
+        }
+    }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = "17"
+    }
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -32,23 +44,22 @@ android {
             )
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
+
     externalNativeBuild {
         cmake {
             path = file("src/main/cpp/CMakeLists.txt")
             version = "3.22.1"
         }
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     packaging {
         resources.pickFirsts.add("META-INF/*.kotlin_module")
         jniLibs {
-            useLegacyPackaging = false  // ensures proper alignment for .so files
+            useLegacyPackaging = false
         }
         resources {
             excludes += listOf(
@@ -66,8 +77,11 @@ android {
     }
 }
 
-dependencies {
+//room {
+//    schemaDirectory("$projectDir/schemas")
+//}
 
+dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.constraintlayout)
@@ -75,7 +89,8 @@ dependencies {
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
 
-    //room db component
-    implementation (libs.room.runtime)
-    annotationProcessor (libs.room.compiler)
+    // Room components
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+//    kapt(libs.room.compiler)
 }

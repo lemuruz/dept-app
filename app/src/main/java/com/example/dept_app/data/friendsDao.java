@@ -12,19 +12,19 @@ import java.util.List;
 public interface friendsDao {
 
     @Insert
-    void insert(friends friend);
+    void insert(Friends friend);
 
     @Update
-    void update(friends friend);
+    void update(Friends friend);
 
     @Delete
-    void delete(friends friend);
+    void delete(Friends friend);
 
     @Query("SELECT * FROM friends ORDER BY id DESC")
-    List<friends> getAllFriends();
+    List<Friends> getAllFriends();
 
     @Query("SELECT * FROM friends WHERE id = :id")
-    friends getFriendById(int id);
+    Friends getFriendById(int id);
 
 
 }

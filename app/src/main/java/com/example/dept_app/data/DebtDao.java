@@ -28,5 +28,5 @@ public interface DebtDao {
     double getTotalByType(String type);
 
     @Query("SELECT * FROM Debts where friendsId = :friendsId")
-    List<Debts> getDebtsByPerson(int friendsId);
+    List<Debts> getDebtsById(int friendsId);
 }

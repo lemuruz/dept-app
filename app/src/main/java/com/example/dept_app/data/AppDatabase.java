@@ -8,8 +8,7 @@ import android.content.Context;
 import com.example.dept_app.data.friendsDao;
 import com.example.dept_app.data.DebtDao;
 
-@Database(entities = {Debts.class, Friends.class,},
-         version = 2)
+@Database(entities = {Debts.class, Friends.class,}, version = 2)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static AppDatabase instance;
@@ -17,12 +16,14 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract friendsDao friendsDao();
     public abstract DebtDao debtDao();
     public static synchronized AppDatabase getInstance(Context context) {
+        context.deleteDatabase("debt_tracker.db"); // delete the database file
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "debt_tracker.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build();
+
         }
         return instance;
     }

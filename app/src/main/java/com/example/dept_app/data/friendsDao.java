@@ -26,5 +26,10 @@ public interface friendsDao {
     @Query("SELECT * FROM friends WHERE id = :id")
     Friends getFriendById(int id);
 
+    @Query("SELECT * FROM friends WHERE name = :name")
+    Friends getFriendByName(String name);
+
+
+
 
 }

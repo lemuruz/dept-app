@@ -16,7 +16,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract friendsDao friendsDao();
     public abstract DebtDao debtDao();
     public static synchronized AppDatabase getInstance(Context context) {
-        context.deleteDatabase("debt_tracker.db"); // delete the database file
+//        context.deleteDatabase("debt_tracker.db"); // delete the database file
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                             AppDatabase.class, "debt_tracker.db")

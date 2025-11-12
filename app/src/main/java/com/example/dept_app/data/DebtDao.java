@@ -1,6 +1,7 @@
 package com.example.dept_app.data;
 
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -29,4 +30,7 @@ public interface DebtDao {
 
     @Query("SELECT * FROM Debts where friendsId = :friendsId")
     List<Debts> getDebtsById(int friendsId);
+
+    @Query("SELECT * FROM debts")
+    LiveData<List<Debts>> getAllDebtsLive();
 }

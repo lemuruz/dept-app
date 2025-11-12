@@ -25,6 +25,11 @@ public class Debts {
     private String type; // "you_owe" or "friend_owes"
 
     // Getters and setters
+
+    public String debtToString() {
+        return date + " | " + description + " | " + amount + " | " + type;
+    }
+
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 

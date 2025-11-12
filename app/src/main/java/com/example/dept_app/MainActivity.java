@@ -1,7 +1,12 @@
 package com.example.dept_app;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dept_app.data.AppDatabase;
@@ -14,81 +19,77 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    // Used to load the 'dept_app' library on application startup.
-    static {
-        System.loadLibrary("dept_app");
-//        System.loadLibrary("native-lib");
-    }
-    public native int calculateNetDebt(int youOwe, int friendOwes);
-    public native void addDebt(String friendName,String date, String desc, double amount, String type);
+    private ViewModel viewModel;
+//    public native int calculateNetDebt(int youOwe, int friendOwes);
+//    public native void addDebt(String friendName,String date, String desc, double amount, String type);
 
-    public void insertDebtFromNative(String friendName, String date, String desc, double amount, String type) {
-        AppDatabase db = AppDatabase.getInstance(this);
-        friendsDao friendsDao = db.friendsDao();
-        DebtDao debtDao = db.debtDao();
-        Friends friend = friendsDao.getFriendByName(friendName);
-        if (friend == null){
-            Friends newFriend = new Friends();
-            newFriend.setName(friendName);
-            friendsDao.insert(newFriend);
-        }
-        // for now, assume personId = 1 for simplicity
-        Debts debt = new Debts();
-        debt.setFriendsId(friendsDao.getFriendByName(friendName).getId());
-        debt.setDate(date);
-        debt.setDescription(desc);
-        debt.setAmount(amount);
-        debt.setType(type);
-        debtDao.insert(debt);
-    }
+//    public void insertDebtFromNative(String friendName, String date, String desc, double amount, String type) {
+//        AppDatabase db = AppDatabase.getInstance(this);
+//        friendsDao friendsDao = db.friendsDao();
+//        DebtDao debtDao = db.debtDao();
+//        Friends friend = friendsDao.getFriendByName(friendName);
+//        if (friend == null){
+//            Friends newFriend = new Friends();
+//            newFriend.setName(friendName);
+//            friendsDao.insert(newFriend);
+//        }
+//        // for now, assume personId = 1 for simplicity
+//        Debts debt = new Debts();
+//        debt.setFriendsId(friendsDao.getFriendByName(friendName).getId());
+//        debt.setDate(date);
+//        debt.setDescription(desc);
+//        debt.setAmount(amount);
+//        debt.setType(type);
+//        debtDao.insert(debt);
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        TextView text = findViewById(R.id.sample_text);
-        int youOwe = 50;
-        int friendOwes = 120;
+        viewModel = new ViewModelProvider(this).get(ViewModel.class);
+        EditText editFriend = findViewById(R.id.editFriend);
+        EditText editDesc = findViewById(R.id.editDesc);
+        EditText editAmount = findViewById(R.id.editAmount);
+        Button btnAddDebt = findViewById(R.id.btnAddDebt);
+        TextView allDebts = findViewById(R.id.tvDebts);
 
 
-        int netDebt = calculateNetDebt(youOwe, friendOwes);
+        btnAddDebt.setOnClickListener(v -> {
+            String friend = editFriend.getText().toString().trim();
+            String desc = editDesc.getText().toString().trim();
+            String amountStr = editAmount.getText().toString().trim();
 
-        text.setText("Net debt = " + netDebt);
+            if (friend.isEmpty() || desc.isEmpty() || amountStr.isEmpty()) {
+                allDebts.setText("Please fill in all fields.");
+                return;
+            }
 
-//      addDebt("anakin","2025-11-03", "Dinner", 150.0, "you_owe");
+            double amount = Double.parseDouble(amountStr);
+            String date = "2025-11-03"; // For now, hardcoded — later we’ll make this dynamic
+            String type = "you_owe";   // You can make this user-selectable later
+            viewModel.addDebt(friend, date, desc, amount, type);
+
+
+            AppDatabase db = AppDatabase.getInstance(this);
+            DebtDao debtDao = db.debtDao();
+
+            List<Debts> debtslist = debtDao.getAllDebts();
+//            String debtsText = debtslist.debtToString();
+            StringBuilder builder = new StringBuilder();
+            for (Debts d : debtslist) {
+                builder.append(d.debtToString()).append("\n");
+            }
+            allDebts.setText(builder.toString());
+            allDebts.setMovementMethod(new ScrollingMovementMethod());
+//            allDebts.setText("Added debt: " + desc + " (" + amount + ")");
+        });
+
     }
-    private void runDatabaseTest() {
-        AppDatabase db = AppDatabase.getInstance(this);
-        friendsDao friendsDao = db.friendsDao();
-        DebtDao debtDao = db.debtDao();
 
-        // Insert a sample person if not exists
-        if (friendsDao.getAllFriends().isEmpty()) {
-            Friends john = new Friends();
-            john.setName("John");
-            friendsDao.insert(john);
-        }
 
-        int johnId = friendsDao.getAllFriends().get(0).getId();
 
-        // Insert a sample debt
-        Debts debt = new Debts();
-        debt.setFriendsId(johnId);
-        debt.setDate("2025-11-03");
-        debt.setDescription("Lunch");
-        debt.setAmount(120);
-        debt.setType("you_owe");
-        debtDao.insert(debt);
-
-        // Print all debts for verification
-        List<Debts> allDebts = debtDao.getAllDebts();
-        for (Debts d : allDebts) {
-            System.out.println("DebtDebug " + friendsDao.getFriendById(d.getFriendsId()).getName()
-                    + " " + d.getDate() + ", description: " + d.getDescription()
-                    + ", amount: " + d.getAmount() + ", type: " + d.getType());
-        }
-    }
 
     /**
      * A native method that is implemented by the 'dept_app' native library,

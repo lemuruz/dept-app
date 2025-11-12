@@ -3,7 +3,7 @@
 //#include "com_example_dept_app_data_Debts"
 
 JNIEXPORT jint JNICALL
-Java_com_example_dept_1app_MainActivity_calculateNetDebt(
+Java_com_example_dept_1app_ViewModel_calculateNetDebt(
         JNIEnv* env,
         jobject thiz,
         jint youOwe,
@@ -13,7 +13,7 @@ Java_com_example_dept_1app_MainActivity_calculateNetDebt(
 
 
 JNIEXPORT void JNICALL
-Java_com_example_dept_1app_MainActivity_addDebt(
+Java_com_example_dept_1app_ViewModel_addDebt(
         JNIEnv* env,
         jobject thiz,
         jstring jfriendName,

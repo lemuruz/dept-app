@@ -25,11 +25,11 @@ public interface DebtDao {
     @Query("SELECT * FROM Debts ORDER BY date DESC")
     List<Debts> getAllDebts();
 
-    @Query("SELECT SUM(amount) FROM debts WHERE type = :type")
-    double getTotalByType(String type);
 
     @Query("SELECT * FROM Debts where friendsId = :friendsId")
     List<Debts> getDebtsById(int friendsId);
+    @Query("SELECT SUM(amount) FROM debts WHERE friendsId = :friendsId AND type = :type")
+    Double getTotalByType(int friendsId, String type);
 
     @Query("SELECT * FROM debts")
     LiveData<List<Debts>> getAllDebtsLive();

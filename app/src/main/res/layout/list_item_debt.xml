@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:gravity="center_vertical">
+
+    <TextView
+        android:id="@+id/tvDebtDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/deleteDebt"
+        android:layout_width="32dp"
+        android:layout_height="48dp"
+        android:text="X"
+        android:textColor="#FF3B30"
+        android:textSize="22sp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:clickable="true"
+        android:focusable="true"/>
+
+</LinearLayout>

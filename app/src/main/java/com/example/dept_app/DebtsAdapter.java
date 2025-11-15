@@ -14,13 +14,13 @@ import java.util.List;
 
 public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.DebtViewHolder> {
     private List<Debts> debts;
-    private OnDebtClickListener listener;
+    private OnDebtDeleteListener listener;
 
-    public interface OnDebtClickListener {
-        void onDebtClick(Debts debt);
+    public interface OnDebtDeleteListener {
+        void onDelete(Debts debt);
     }
 
-    public DebtsAdapter(List<Debts> debts, OnDebtClickListener listener) {
+    public DebtsAdapter(List<Debts> debts, OnDebtDeleteListener listener) {
         this.debts = debts;
         this.listener = listener;
     }
@@ -29,27 +29,28 @@ public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.DebtViewHold
     @Override
     public DebtViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_2, parent, false);
+                .inflate(R.layout.list_item_debt, parent, false);
         return new DebtViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DebtViewHolder holder, int position) {
         Debts d = debts.get(position);
-        holder.text1.setText(d.getDescription());
-        holder.text2.setText(d.getDate() + " - " + d.getAmount() + " (" + d.getType() + ")");
-        holder.itemView.setOnClickListener(v -> listener.onDebtClick(d));
+//        holder.text1.setText(d.getDescription());
+        holder.text1.setText(d.getDescription() +" "+d.getDate() + " - " + d.getAmount() + " (" + d.getType() + ")");
+        holder.deleteDebt.setOnClickListener(v -> listener.onDelete(d));
     }
 
     @Override
     public int getItemCount() { return debts.size(); }
 
     static class DebtViewHolder extends RecyclerView.ViewHolder {
-        TextView text1, text2;
+        TextView text1, text2,deleteDebt;
         DebtViewHolder(View view) {
             super(view);
-            text1 = view.findViewById(android.R.id.text1);
-            text2 = view.findViewById(android.R.id.text2);
+            text1 = view.findViewById(R.id.tvDebtDetail);
+//            text2 = view.findViewById(android.R.id.text2);
+            deleteDebt = itemView.findViewById(R.id.deleteDebt);
         }
     }
 }

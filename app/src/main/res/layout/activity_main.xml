@@ -56,6 +56,13 @@
                 android:inputType="numberDecimal"
                 android:paddingHorizontal="12dp"
                 android:textSize="16sp" />
+            <TextView
+                android:id="@+id/tvSelectDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:textSize="16sp"
+                android:padding="8dp" />
 
             <Button
                 android:id="@+id/btnAddDebt"

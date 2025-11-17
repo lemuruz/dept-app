@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -18,13 +19,18 @@ import com.example.dept_app.data.DebtDao;
 import com.example.dept_app.data.Friends;
 import com.example.dept_app.data.friendsDao;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
     private ViewModel viewModel;
     private FriendsAdapter adapter;
     private friendsDao friendsDao;
+    private String selectedDate = null;
 
 
     @Override
@@ -45,6 +51,11 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
+        TextView tvDate = findViewById(R.id.tvSelectDate);
+        tvDate.setText(getToday());
+        tvDate.setOnClickListener(v -> openDatePicker(tvDate));
+
+
         List<Friends> friends = friendsDao.getAllFriends();
         adapter = new FriendsAdapter(friends, friend_ -> {
             Intent intent = new Intent(this, FriendDebtsActivity.class); //go to debt page
@@ -63,10 +74,15 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
+            String dateToUse = (selectedDate == null) ? getToday() : selectedDate;
+            selectedDate = null;
+            tvDate.setText(getToday());
+
+
             double amount = Double.parseDouble(amountStr);
-            String date = "2025-11-03"; // For now, hardcoded — later we’ll make this dynamic
+//            String date = "2025-11-03"; // For now, hardcoded — later we’ll make this dynamic
             String type = "you_owe";   // You can make this user-selectable later
-            viewModel.addDebt(friend, date, desc, amount, type);
+            viewModel.addDebt(friend, dateToUse, desc, amount, type);
 
 
 
@@ -87,7 +103,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void openDatePicker(TextView tv) {
+        Calendar c = Calendar.getInstance();
+        int year = c.get(Calendar.YEAR);
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
 
+        DatePickerDialog dialog = new DatePickerDialog(
+                this,
+                (view, y, m, d) -> {
+                    selectedDate = y + "-" + (m + 1) + "-" + d;
+                    tv.setText(selectedDate);   // show chosen date
+                },
+                year, month, day
+        );
+        dialog.show();
+    }
+
+    private String getToday() {
+        return new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+                .format(new Date());
+    }
 
 
     /**

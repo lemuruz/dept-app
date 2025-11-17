@@ -50,7 +50,7 @@ public class FriendDebtsActivity extends AppCompatActivity {
 
         // Calculate net debt
         Double oweResult = debtDao.getTotalByType(friendId, "you_owe");
-        Double owedResult = debtDao.getTotalByType(friendId, "owe_you");
+        Double owedResult = debtDao.getTotalByType(friendId, "you_lend");
 
         double owe = (oweResult != null) ? oweResult : 0.0;
         double owed = (owedResult != null) ? owedResult : 0.0;

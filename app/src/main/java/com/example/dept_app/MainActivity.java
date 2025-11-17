@@ -31,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     private FriendsAdapter adapter;
     private friendsDao friendsDao;
     private String selectedDate = null;
+    private String currentType = "you_owe";
+
 
 
     @Override
@@ -55,6 +57,18 @@ public class MainActivity extends AppCompatActivity {
         tvDate.setText(getToday());
         tvDate.setOnClickListener(v -> openDatePicker(tvDate));
 
+        TextView tvType = findViewById(R.id.tvSelectType);
+        tvType.setOnClickListener(v -> {
+            if (currentType.equals("you_owe")) {
+                currentType = "you_lend";
+                tvType.setText("You Lend");
+                tvType.setBackgroundResource(R.drawable.bg_type_lend);
+            } else {
+                currentType = "you_owe";
+                tvType.setText("You Owe");
+                tvType.setBackgroundResource(R.drawable.bg_type_owe);
+            }
+        });
 
         List<Friends> friends = friendsDao.getAllFriends();
         adapter = new FriendsAdapter(friends, friend_ -> {
@@ -81,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
 
             double amount = Double.parseDouble(amountStr);
 //            String date = "2025-11-03"; // For now, hardcoded — later we’ll make this dynamic
-            String type = "you_owe";   // You can make this user-selectable later
-            viewModel.addDebt(friend, dateToUse, desc, amount, type);
+//            String type = "you_owe";   // You can make this user-selectable later
+            viewModel.addDebt(friend, dateToUse, desc, amount, currentType);
 
 
 

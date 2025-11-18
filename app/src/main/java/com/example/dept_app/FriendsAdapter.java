@@ -100,9 +100,11 @@ public class FriendsAdapter extends RecyclerView.Adapter<FriendsAdapter.FriendVi
             double owedToYou = (owedToYouResult != null) ? owedToYouResult : 0.0;
             netDebt.setText("Net: " + (owedToYou - owe));
 
-//            findViewById(R.id.btnAddDebt).setOnClickListener(v -> {
-//                // TODO: open AddDebtActivity or dialog
-//            });
+
         }
     }
+    public void setFriends(List<Friends> updatedList) {
+        this.friends = updatedList;
+    }
+
 }

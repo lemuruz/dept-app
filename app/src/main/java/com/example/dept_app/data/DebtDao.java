@@ -33,4 +33,7 @@ public interface DebtDao {
 
     @Query("SELECT * FROM debts")
     LiveData<List<Debts>> getAllDebtsLive();
+
+    @Query("DELETE FROM debts WHERE friendsId = :friendsId")
+    void deleteDebtsByFriendId(int friendsId);
 }

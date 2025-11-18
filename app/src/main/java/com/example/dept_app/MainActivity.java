@@ -94,29 +94,29 @@ public class MainActivity extends AppCompatActivity {
 
 
             double amount = Double.parseDouble(amountStr);
-//            String date = "2025-11-03"; // For now, hardcoded — later we’ll make this dynamic
-//            String type = "you_owe";   // You can make this user-selectable later
             viewModel.addDebt(friend, dateToUse, desc, amount, currentType);
 
 
 
-//            DebtDao debtDao = db.debtDao();
-//            List<Debts> debtslist = debtDao.getAllDebts();
-////            String debtlog = debtslist.debtToString();
-//            StringBuilder builder = new StringBuilder();
-//            for (Debts d : debtslist) {
-//                builder.append(d.debtToString()).append("\n");
-//            }
-//            allDebts.setText(builder.toString());
-//            allDebts.setMovementMethod(new ScrollingMovementMethod());
-            debtlog.setText("Added debt: " + desc + " (" + amount + ")");
+            debtlog.setText("{Added debt: " + desc + " (" + amount + ")}");
+            loadFriends();
 
 
 
         });
 
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadFriends();
+    }
 
+    private void loadFriends() {
+        List<Friends> friends = friendsDao.getAllFriends();
+        adapter.setFriends(friends);
+        adapter.notifyDataSetChanged();
+    }
     private void openDatePicker(TextView tv) {
         Calendar c = Calendar.getInstance();
         int year = c.get(Calendar.YEAR);

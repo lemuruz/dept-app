@@ -1,6 +1,7 @@
 package com.example.dept_app;
 
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,10 +38,11 @@ public class FriendDebtsActivity extends AppCompatActivity {
         TextView friendName = findViewById(R.id.tvFriendName);
         TextView netDebt = findViewById(R.id.tvNetDebt);
         RecyclerView recyclerView = findViewById(R.id.recyclerDebts);
+        Button removeFriendBtn = findViewById(R.id.btnRemoveFriend);
 
         friendName.setText(friend.getName());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-
+            //debt deletion
         List<Debts> debts = debtDao.getDebtsById(friendId);
         adapter = new DebtsAdapter(debts, d -> {
             debtDao.delete(d);
@@ -56,8 +58,26 @@ public class FriendDebtsActivity extends AppCompatActivity {
         double owed = (owedResult != null) ? owedResult : 0.0;
         netDebt.setText("Net: " + (owed - owe));
 
-//        findViewById(R.id.btnAddDebt).setOnClickListener(v -> {
-//            // TODO: open AddDebtActivity or dialog
-//        });
+
+            //friend removal
+        removeFriendBtn.setOnClickListener(v -> {
+            new androidx.appcompat.app.AlertDialog.Builder(this)
+                    .setTitle("Remove Friend")
+                    .setMessage("Are you sure you want to delete this friend and all their debts?")
+                    .setPositiveButton("Yes", (dialog, which) -> {
+
+                        // 1. Delete this friend's debts
+                        debtDao.deleteDebtsByFriendId(friendId);
+
+                        // 2. Delete friend itself
+                        friendsDao.delete(friend);
+
+                        // 3. Close this screen
+                        finish();
+                    })
+                    .setNegativeButton("Cancel", null)
+                    .show();
+        });
+
     }
 }

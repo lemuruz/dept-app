@@ -20,11 +20,10 @@
 
             <TextView
                 android:id="@+id/tvFriendName"
-                android:paddingRight="16dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:paddingRight="16dp"
                 android:textSize="30sp"
-                android:textColor="@android:color/black"
                 android:textStyle="bold" />
 
             <TextView
@@ -42,7 +41,7 @@
             <Button
             android:id="@+id/btnRemoveFriend"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="48dp"
             android:backgroundTint="#FF0000"
             android:text="remove friend"
             android:textColor="@android:color/white"
@@ -51,17 +50,23 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp"
             android:id="@+id/recyclerDebts"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="430dp"
             android:layout_weight="1"
+            android:paddingLeft="16dp"
+            android:paddingTop="8dp"
+            android:paddingRight="16dp"
+            android:paddingBottom="8dp"
 
             />
 
+        <TextView
+            android:layout_width="193dp"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:text="'-' = you owed them\n'+' = they owed you"
+            android:textSize="15sp" />
     </LinearLayout>
 
 

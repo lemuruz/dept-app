@@ -13,7 +13,7 @@ import com.example.dept_app.data.Friends;
 import com.example.dept_app.data.friendsDao;
 
 import java.util.List;
-import java.util.concurrent.Executors;
+
 
 public class ViewModel extends AndroidViewModel {
     static {

@@ -8,14 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
+
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.dept_app.data.AppDatabase;
-import com.example.dept_app.data.Debts;
-import com.example.dept_app.data.DebtDao;
+
 import com.example.dept_app.data.Friends;
 import com.example.dept_app.data.friendsDao;
 

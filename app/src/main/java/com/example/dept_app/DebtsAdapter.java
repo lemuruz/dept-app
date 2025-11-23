@@ -37,7 +37,7 @@ public class DebtsAdapter extends RecyclerView.Adapter<DebtsAdapter.DebtViewHold
     public void onBindViewHolder(@NonNull DebtViewHolder holder, int position) {
         Debts d = debts.get(position);
 //        holder.text1.setText(d.getDescription());
-        holder.text1.setText(d.getDescription() +" "+d.getDate() + " - " + d.getAmount() + " (" + d.getType() + ")");
+        holder.text1.setText(d.getDescription() +" ||| "+d.getDate() + "  || " + d.getAmount() + "  (" + d.getType() + ")");
         holder.deleteDebt.setOnClickListener(v -> listener.onDelete(d));
     }
 
